@@ -1,0 +1,60 @@
+from enaml.layout.api import grid, hbox, vbox, spacer
+from enaml.widgets.api import (EnableCanvas, Window, Container, Label, Slider,
+        Html, MPLCanvas, PushButton, RadioButton)
+
+
+enamldef SensorViewWindow(Window): win:
+    attr io_controller
+
+    Container: cont:
+        hug_height = 'ignore'
+        constraints << [
+                vbox(
+                    hbox(x_plot, acc_x),
+                    hbox(y_plot, acc_y),
+                    hbox(z_plot, acc_z),
+                ),
+
+                x_plot.height == y_plot.height,
+                x_plot.height == z_plot.height,
+
+                acc_x.width == 50,
+                acc_y.width == 50,
+                acc_z.width == 50,
+
+                acc_x.v_center == x_plot.v_center,
+                acc_y.v_center == y_plot.v_center,
+                acc_z.v_center == z_plot.v_center,
+                ]
+
+        EnableCanvas: x_plot:
+            component = io_controller.acc_x_plot
+        EnableCanvas: y_plot:
+            component = io_controller.acc_y_plot
+        EnableCanvas: z_plot:
+            component = io_controller.acc_z_plot
+
+        Container: acc_x:
+            constraints <<[hbox(nx, spacer, lx)]
+            Label: nx:
+                hug_height = 'ignore'
+                text << str(io_controller.acc_x)
+            Label: lx:
+                hug_height = 'ignore'
+                text << '<b>X</b>'
+        Container: acc_y:
+            constraints <<[hbox(ny, spacer, ly)]
+            Label: ny:
+                hug_height = 'ignore'
+                text << str(io_controller.acc_y)
+            Label: ly:
+                hug_height = 'ignore'
+                text << '<b>Y</b>'
+        Container: acc_z:
+            constraints <<[hbox(nz, spacer, lz)]
+            Label: nz:
+                hug_height = 'ignore'
+                text << str(io_controller.acc_z)
+            Label: lz:
+                hug_height = 'ignore'
+                text << '<b>Z</b>'

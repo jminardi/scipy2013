@@ -1,0 +1,24 @@
+from enaml.layout.api import hbox, vbox
+from enaml.widgets.api import Window, Container, Label, Slider
+
+
+enamldef SensorViewWindow(Window): win:
+    attr io_controller
+
+    Container: cont:
+        hug_height = 'ignore'
+        constraints << [
+                vbox(
+                    hbox(servo, servo_slider),
+                ),
+
+                servo_slider.height == 50,
+                ]
+
+        Label: servo:
+            hug_height = 'ignore'
+            text = '<b>Servo</b>'
+
+        Slider: servo_slider:
+            hug_height = 'ignore'
+            value := io_controller.servo_value
